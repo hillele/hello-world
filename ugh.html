@@ -1,0 +1,244 @@
+<!DOCTYPE html><html>
+
+<head>
+<title>Elex's Final</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css"/>
+
+<style>
+body {
+    background: #694873; 
+    background: -webkit-linear-gradient(#694873, #8B728E);
+    background: -o-linear-gradient(#694873, #8B728E);
+    background: -moz-linear-gradient(#694873, #8B728E); 
+    background: linear-gradient(#694873, #8B728E); 
+}
+
+.intro {
+	margin: 50px;
+	padding: 20px;
+	color: white;
+	background-color: #23562a;
+	border: 3px solid #16381b;
+	border-radius: 5px;
+	font-family: Arial;
+}
+
+h1 {
+	text-align: center;
+}
+
+#grid {
+	margin: 50px;
+	padding: 20px;
+
+}
+
+#map {
+	width: 700px;
+	height: 800px;
+	margin-left: -500px;
+	margin: 15px;
+	float: left;
+	border: 2px solid #16381b;
+}
+
+#options {
+	text-align: right;
+	margin-right: 15px;
+	width: 100%;
+	color: white;
+	background-color: #23562a;
+}
+
+#clear {
+	clear: both;
+}
+
+.button {
+	font-family: Arial;
+	border: 2px solid #694873;
+	border-radius: 4px;
+	margin: 2px;
+	padding: 3px;
+	padding-right: 5px;
+	padding-left: 5px;
+	color: white;
+	background-color: #8B728E
+
+}
+</style>
+</head>
+
+<body>
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.4"></script>
+<script src="shapes.js"></script>
+
+<div class="intro">
+<h1>Possible Washington Road Trip</h1>
+<p>Include a paragraph describing the purpose of your map, as well as your targeted users.</p>
+<p> Include a paragraph justifying the various cartographic decisions that you have made, 
+including the basemap, the color scheme, the features you chose to include, and any other 
+stylization you did within your map.</p>
+<p> Include a paragraph describing the new Leaflet capability that you learned and included 
+in your map. Describe how the user makes use of this feature.</p>
+</div>
+
+<div id="grid" class="intro">
+	<div id="map"></div>
+	<div id="options">
+	<h2>Here are the options for seeing these things!</h3><br>
+	<p>View based on day of trip: 
+		<button onclick="dayOne()" class="button" >Day 1</button>
+		<button onclick="dayTwo()" class="button">Day 2</button>
+		<button onclick="dayThree()" class="button">Day 3</button>
+		<button onclick="dayFour()" class="button">Day 4</button>
+		<button onclick="dayFive()" class="button">Day 5</button>
+		<button onclick="allDays()" class="button">Full Trip</button>
+	</p>
+	<p>See information on Campgrounds? 
+		<button onclick="showCamp()" class="button" >Yes Please</button>
+		<button onclick="remove()" class="button">Remove Them</button>
+	</p>
+<div id="clear"></div>
+</div>
+
+
+</div>
+
+<script>
+// Initialize map
+var map = L.map('map',
+	{
+	center: [46.871428, -122.755241],
+	zoom: 8
+});
+
+// Basemap
+var nightBase = new L.StamenTileLayer('terrain');
+map.addLayer(nightBase);
+
+// Icon
+var greenIcon = new L.Icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+// Determining Color of lines/outline based on types
+function lineColor(x) {
+	return x == 'Drive' ? '#000000':
+	x == 'Campground' ? '#665229':
+	x == 'Hike' ? '#fee8c8':'#f442c2';
+}
+
+// Line weight of shapes based on type
+function lineWeight(x) {
+	return x == 'Drive' ? 1:
+	x == 'Campground' ? 2:
+	x == 'Hike' ? 3: 1;
+}
+
+// Styling GeoJSON - Density 
+function shapeStyle(feature) {
+	return {
+		fillColor: 'yellow', // Will only give fill to campgrounds
+		weight: lineWeight(feature.properties.type),
+		opacity: 1,
+		color: lineColor(feature.properties.type),
+		fillOpacity: 1
+	};
+}
+
+// Specific Stylings for Each day (essentially hides and shows shapes of days)
+function shape1(feature) {
+	if (feature.properties.day == 1) {
+		return shapeStyle(feature);
+	} else {
+		return {opacity: 0, fillOpacity: 0};
+	}
+}
+
+function shape2(feature) {
+	if (feature.properties.day == 2) {
+		return shapeStyle(feature);
+	} else {
+		return {opacity: 0, fillOpacity: 0};
+	}
+}
+
+function shape3(feature) {
+	if (feature.properties.day == 3) {
+		return shapeStyle(feature);
+	} else {
+		return {opacity: 0, fillOpacity: 0};
+	}
+}
+
+function shape4(feature) {
+	if (feature.properties.day == 4) {
+		return shapeStyle(feature);
+	} else {
+		return {opacity: 0, fillOpacity: 0};
+	}
+}
+
+function shape5(feature) {
+	if (feature.properties.day == 5) {
+		return shapeStyle(feature);
+	} else {
+		return {opacity: 0, fillOpacity: 0};
+	}
+}
+
+// Adding GeoJSON full Shapes to map
+var shapeLayer = L.geoJson(myShapes, {style: shapeStyle}).addTo(map);
+
+// Day Button Functions
+function dayOne() {
+	shapeLayer.setStyle(shape1);
+}
+
+function dayTwo() {
+	shapeLayer.setStyle(shape2);
+} 
+
+function dayThree() {
+	shapeLayer.setStyle(shape3);
+}
+
+function dayFour() {
+	shapeLayer.setStyle(shape4);
+} 
+
+function dayFive() {
+	shapeLayer.setStyle(shape5);
+}
+
+function allDays() {
+	shapeLayer.setStyle(shapeStyle);
+}
+
+// Campground Popup Buttons
+
+
+function campPopup(feature, layer) {
+	if (feature.properties.type == 'Campground') {
+		layer.bindPopup(feature.properties.name + " Help");
+	}
+}
+
+function showCamp() {
+	map.removeLayer(shapeLayer);
+	shapeLayer = L.geoJson(myShapes, {style: shapeStyle, onEachFeature: campPopup}).addTo(map);
+}
+
+
+</script>
+
+</body>
+
+</html>
