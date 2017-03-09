@@ -92,8 +92,6 @@ in your map. Describe how the user makes use of this feature.</p>
 		<button onclick="dayOne()" class="button" >Day 1</button>
 		<button onclick="dayTwo()" class="button">Day 2</button>
 		<button onclick="dayThree()" class="button">Day 3</button>
-		<button onclick="dayFour()" class="button">Day 4</button>
-		<button onclick="dayFive()" class="button">Day 5</button>
 		<button onclick="allDays()" class="button">Full Trip</button>
 	</p>
 	<p>See information on Campgrounds? 
@@ -110,8 +108,8 @@ in your map. Describe how the user makes use of this feature.</p>
 // Initialize map
 var map = L.map('map',
 	{
-	center: [46.871428, -122.755241],
-	zoom: 8
+	center: [46.950179, -123.553737],
+	zoom: 9
 });
 
 // Basemap
@@ -178,22 +176,6 @@ function shape3(feature) {
 	}
 }
 
-function shape4(feature) {
-	if (feature.properties.day == 4) {
-		return shapeStyle(feature);
-	} else {
-		return {opacity: 0, fillOpacity: 0};
-	}
-}
-
-function shape5(feature) {
-	if (feature.properties.day == 5) {
-		return shapeStyle(feature);
-	} else {
-		return {opacity: 0, fillOpacity: 0};
-	}
-}
-
 // Adding GeoJSON full Shapes to map
 var shapeLayer = L.geoJson(myShapes, {style: shapeStyle}).addTo(map);
 
@@ -208,14 +190,6 @@ function dayTwo() {
 
 function dayThree() {
 	shapeLayer.setStyle(shape3);
-}
-
-function dayFour() {
-	shapeLayer.setStyle(shape4);
-} 
-
-function dayFive() {
-	shapeLayer.setStyle(shape5);
 }
 
 function allDays() {
